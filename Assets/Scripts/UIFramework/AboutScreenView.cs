@@ -19,6 +19,7 @@ public class AboutScreenView : UIView
     #endregion PUBLIC_MEMBER_VARIABLES
     
     #region PRIVATE_MEMBER_VARIABLES
+	private const bool skipAboutScreen = true;
     GUIStyle mAboutTitleBgStyle;
     GUIStyle mOKButtonBgStyle;
     
@@ -50,6 +51,9 @@ public class AboutScreenView : UIView
     #region UIView implementation
     public void LoadView ()
     {
+		if(skipAboutScreen) {
+			return;
+		}
         m_AboutText = Resources.Load("Vuforia_About") as TextAsset;
         mBox = new UIBox(UIConstants.BoxRect, UIConstants.MainBackground);
         mAboutTitleBgStyle = new GUIStyle();
@@ -102,6 +106,13 @@ public class AboutScreenView : UIView
     {
         if(!tf)
             return;
+		if(skipAboutScreen) {
+			if(this.OnStartButtonTapped != null)
+			{
+				this.OnStartButtonTapped();
+			}
+			return;
+		}
         float scale = 1*DeviceDependentScale;
         mAboutTitleHeight = 80.0f* scale;
         mBox.Draw();

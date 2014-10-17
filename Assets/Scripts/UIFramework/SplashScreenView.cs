@@ -11,24 +11,42 @@ using System.Collections;
 public class SplashScreenView : UIView
 {
     #region PRIVATE_MEMBER_VARIABLES
-    private Texture mAndroidPotrait;
-    #endregion PRIVATE_MEMBER_VARIABLES
+	private const bool skipSplashScreen = false;
+    private Texture mAndroidPortrait;
+	private Texture mAndroidLandscape;
+	#endregion PRIVATE_MEMBER_VARIABLES
     
     #region UIView implementation
     public void LoadView ()
     {
-        mAndroidPotrait = Resources.Load("SplashScreen/AndroidPotrait") as Texture;
-    }
+		if(skipSplashScreen) {
+			return;
+		}
+		mAndroidPortrait = Resources.Load("SplashScreen/AndroidPortrait") as Texture;
+		mAndroidLandscape = Resources.Load("SplashScreen/AndroidLandscape") as Texture;
+	}
 
     public void UnLoadView ()
     {
-        Resources.UnloadAsset(mAndroidPotrait);
+		if(mAndroidPortrait != null) {
+			Resources.UnloadAsset(mAndroidPortrait);
+		}
+		if(mAndroidLandscape != null) {
+			Resources.UnloadAsset(mAndroidLandscape);
+		}
     }
 
     public void UpdateUI (bool tf)
     {
         if(!tf)return;
-        GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), mAndroidPotrait, ScaleMode.ScaleAndCrop);
+		if(skipSplashScreen) {
+			return;
+		}
+		if(Screen.width > Screen.height) {
+			GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), mAndroidLandscape, ScaleMode.ScaleAndCrop);
+		} else {
+			GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), mAndroidPortrait, ScaleMode.ScaleAndCrop);
+		}
     }
     #endregion UIView implementation
 }
